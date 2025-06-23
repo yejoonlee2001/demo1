@@ -5,9 +5,10 @@ import logging
 from datetime import datetime
 import json
 
-# 로컬 모듈 import
-from crawler import DongseoCrawler
-from notification_service import OneSignalService
+# 로컬 모듈 import (수정된 부분)
+from src.crawler import DongseoCrawler
+from src.notification_service import OneSignalService
+
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
