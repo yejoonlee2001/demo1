@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시연용 관리 페이지 - 동서대학교 공지사항 알림 시스템</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- OneSignal SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "412bf56c-7f9d-48a5-9bb1-ced8f7f93755",
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="university-name">시연용 관리 페이지</span>
+                    <span class="system-name">동서대학교 공지사항 알림 시스템</span>
+                </h1>
+                <div class="header-actions">
+                    <a href="/" class="demo-link">메인 페이지로 돌아가기</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="demo-section">
+                <h2 class="section-title">🎯 시연 기능</h2>
+                <p class="section-description">
+                    아래 버튼들을 사용하여 공지사항 알림 시스템의 주요 기능을 시연할 수 있습니다.
+                </p>
+
+                <div class="demo-controls">
+                    <div class="demo-card">
+                        <h3>📢 공지사항 생성 및 알림 발송</h3>
+                        <p>새로운 시연용 공지사항을 생성하고 구독자들에게 푸시 알림을 발송합니다.</p>
+                        <button id="createNoticeBtn" class="demo-btn primary">
+                            공지사항 생성 및 알림 발송
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>🔔 커스텀 알림 발송</h3>
+                        <p>원하는 제목과 내용으로 테스트 알림을 발송합니다.</p>
+                        <div class="input-group">
+                            <input type="text" id="customTitle" placeholder="알림 제목" class="demo-input">
+                            <textarea id="customMessage" placeholder="알림 내용" class="demo-textarea"></textarea>
+                        </div>
+                        <button id="sendNotificationBtn" class="demo-btn secondary">
+                            테스트 알림 발송
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>🗑️ 시연용 데이터 정리</h3>
+                        <p>생성된 시연용 공지사항들을 모두 삭제합니다.</p>
+                        <button id="clearDataBtn" class="demo-btn danger">
+                            시연용 공지사항 삭제
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h2 class="section-title">📊 시스템 상태</h2>
+                
+                <div class="status-grid">
+                    <div class="status-card">
+                        <h3>OneSignal 연결 상태</h3>
+                        <div class="status-indicator-container">
+                            <span class="status-indicator status-{{ onesignal_status.status }}"></span>
+                            <span class="status-text">{{ onesignal_status.message }}</span>
+                        </div>
+                        <div class="status-details">
+                            <p><strong>App ID:</strong> {{ onesignal_status.app_id }}</p>
+                            <p><strong>API Key 설정:</strong> {{ '✅ 설정됨' if onesignal_status.has_api_key else '❌ 미설정' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="status-card">
+                        <h3>시연용 공지사항</h3>
+                        <div class="demo-notices-count">
+                            <span class="count-number">{{ demo_notices|length }}</span>
+                            <span class="count-label">개 생성됨</span>
+                        </div>
+                        <button id="refreshStatusBtn" class="refresh-btn small">상태 새로고침</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-notices-section">
+                <h2 class="section-title">📝 생성된 시연용 공지사항</h2>
+                
+                <div id="demoNoticesList" class="demo-notices-list">
+                    {% for notice in demo_notices %}
+                    <div class="demo-notice-item">
+                        <div class="demo-notice-title">{{ notice.title }}</div>
+                        <div class="demo-notice-content">{{ notice.content }}</div>
+                        <div class="demo-notice-time">{{ notice.created_at }}</div>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <p>아직 생성된 시연용 공지사항이 없습니다.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="instructions-section">
+                <h2 class="section-title">🎬 시연 가이드</h2>
+                <div class="instructions">
+                    <ol>
+                        <li><strong>알림 구독:</strong> 메인 페이지에서 "알림 구독하기" 버튼을 클릭하여 브라우저 알림을 허용합니다.</li>
+                        <li><strong>공지사항 생성:</strong> "공지사항 생성 및 알림 발송" 버튼을 클릭합니다.</li>
+                        <li><strong>알림 확인:</strong> 브라우저에서 푸시 알림이 나타나는지 확인합니다.</li>
+                        <li><strong>메인 페이지 확인:</strong> 메인 페이지로 돌아가서 새로운 공지사항이 추가되었는지 확인합니다.</li>
+                        <li><strong>데이터 정리:</strong> 시연 완료 후 "시연용 공지사항 삭제" 버튼으로 정리합니다.</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 동서대학교 공지사항 알림 시스템. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- 알림 메시지 -->
+    <div id="alertMessage" class="alert-message"></div>
+
+    <script>
+        // OneSignal 상태 정보를 JavaScript로 전달
+        window.oneSignalStatus = {{ onesignal_status | tojsonfilter | safe }};
+        
+        // 시연용 기능 JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 공지사항 생성 및 알림 발송
+            document.getElementById('createNoticeBtn').addEventListener('click', async function() {
+                this.disabled = true;
+                this.textContent = '생성 중...';
+                
+                try {
+                    const response = await fetch('/api/demo/create-notice', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showAlert('✅ ' + result.message, 'success');
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        showAlert('❌ ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    showAlert('❌ 오류가 발생했습니다: ' + error.message, 'error');
+                } finally {
+                    this.disabled = false;
+                    this.textContent = '공지사항 생성 및 알림 발송';
+                }
+            });
+            
+            // 커스텀 알림 발송
+            document.getElementById('sendNotificationBtn').addEventListener('click', async function() {
+                const title = document.getElementById('customTitle').value.trim();
+                const message = document.getElementById('customMessage').value.trim();
+                
+                if (!title && !message) {
+                    showAlert('⚠️ 제목 또는 내용을 입력해주세요.', 'warning');
+                    return;
+                }
+                
+                this.disabled = true;
+                this.textContent = '발송 중...';
+                
+                try {
+                    const response = await fetch('/api/demo/send-notification', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title, message })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showAlert('✅ ' + result.message, 'success');
+                        document.getElementById('customTitle').value = '';
+                        document.getElementById('customMessage').value = '';
+                    } else {
+                        showAlert('❌ ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    showAlert('❌ 오류가 발생했습니다: ' + error.message, 'error');
+                } finally {
+                    this.disabled = false;
+                    this.textContent = '테스트 알림 발송';
+                }
+            });
+            
+            // 시연용 데이터 정리
+            document.getElementById('clearDataBtn').addEventListener('click', async function() {
+                if (!confirm('정말로 모든 시연용 공지사항을 삭제하시겠습니까?')) {
+                    return;
+                }
+                
+                this.disabled = true;
+                this.textContent = '삭제 중...';
+                
+                try {
+                    const response = await fetch('/api/demo/clear', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showAlert('✅ ' + result.message, 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showAlert('❌ ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    showAlert('❌ 오류가 발생했습니다: ' + error.message, 'error');
+                } finally {
+                    this.disabled = false;
+                    this.textContent = '시연용 공지사항 삭제';
+                }
+            });
+            
+            // 상태 새로고침
+            document.getElementById('refreshStatusBtn').addEventListener('click', function() {
+                location.reload();
+            });
+        });
+        
+        // 알림 메시지 표시 함수
+        function showAlert(message, type = 'info') {
+            const alertElement = document.getElementById('alertMessage');
+            alertElement.textContent = message;
+            alertElement.className = `alert-message alert-${type} show`;
+            
+            setTimeout(() => {
+                alertElement.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+

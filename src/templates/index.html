@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동서대학교 공지사항 알림 시스템</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- OneSignal SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "412bf56c-7f9d-48a5-9bb1-ced8f7f93755",
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="university-name">동서대학교</span>
+                    <span class="system-name">공지사항 알림 시스템</span>
+                </h1>
+                <div class="header-actions">
+                    <div class="notification-container">
+                        <button id="notificationBtn" class="notification-btn">
+                            <span id="notificationIcon">🔔</span>
+                            <span id="notificationText">알림 구독하기</span>
+                        </button>
+                    </div>
+                    <a href="/demo" class="demo-link">시연용 관리 페이지</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="controls">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="공지사항 검색..." class="search-input">
+                    <button id="searchBtn" class="search-btn">검색</button>
+                </div>
+                <button id="refreshBtn" class="refresh-btn">새로고침</button>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-info">
+                    <span id="noticeCount">{{ notices|length }}건의 공지사항</span>
+                    <span class="separator">|</span>
+                    <span id="lastUpdate">마지막 업데이트: {{ moment().format('YYYY-MM-DD HH:mm') }}</span>
+                </div>
+                <div class="onesignal-status">
+                    <span class="status-indicator status-{{ onesignal_status.status }}"></span>
+                    <span class="status-text">{{ onesignal_status.message }}</span>
+                </div>
+            </div>
+
+            <div class="notices-container">
+                <div class="notices-header">
+                    <div class="header-cell number">번호</div>
+                    <div class="header-cell title">제목</div>
+                    <div class="header-cell author">작성자</div>
+                    <div class="header-cell date">등록일</div>
+                </div>
+                
+                <div id="noticesList" class="notices-list">
+                    {% for notice in notices %}
+                    <div class="notice-item" data-id="{{ notice.id }}">
+                        <div class="notice-cell number">
+                            {% if notice.number == '공지' %}
+                                <span class="notice-badge">공지</span>
+                            {% else %}
+                                {{ notice.number }}
+                            {% endif %}
+                        </div>
+                        <div class="notice-cell title">
+                            {% if notice.url %}
+                                <a href="{{ notice.url }}" target="_blank" class="notice-link">
+                                    {{ notice.title }}
+                                </a>
+                            {% else %}
+                                {{ notice.title }}
+                            {% endif %}
+                        </div>
+                        <div class="notice-cell author">{{ notice.author }}</div>
+                        <div class="notice-cell date">{{ notice.date }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if not notices %}
+            <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>공지사항이 없습니다</h3>
+                <p>새로고침 버튼을 클릭하여 최신 공지사항을 확인해보세요.</p>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 동서대학교 공지사항 알림 시스템. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // OneSignal 상태 정보를 JavaScript로 전달
+        window.oneSignalStatus = {{ onesignal_status | tojsonfilter | safe }};
+    </script>
+</body>
+</html>
+

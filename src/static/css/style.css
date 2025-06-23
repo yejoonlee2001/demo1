@@ -1,0 +1,640 @@
+/* 동서대학교 공지사항 알림 시스템 스타일 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 헤더 스타일 */
+.header {
+    background: linear-gradient(135deg, #003876, #0056b3);
+    color: white;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.university-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.system-name {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-container {
+    position: relative;
+}
+
+.notification-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notification-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.notification-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.demo-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.demo-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 메인 콘텐츠 */
+.main {
+    flex: 1;
+    padding: 2rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #003876;
+}
+
+.search-btn, .refresh-btn {
+    background: #003876;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover, .refresh-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.status-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.separator {
+    color: #ccc;
+}
+
+.onesignal-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-connected { background: #28a745; }
+.status-not_configured { background: #ffc107; }
+.status-error { background: #dc3545; }
+.status-network_error { background: #fd7e14; }
+
+/* 공지사항 목록 */
+.notices-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notices-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px 120px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    color: #495057;
+}
+
+.header-cell {
+    padding: 1rem;
+    text-align: center;
+    border-right: 1px solid #e9ecef;
+}
+
+.header-cell:last-child {
+    border-right: none;
+}
+
+.notices-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.notice-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px 120px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+.notice-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notice-cell {
+    padding: 1rem;
+    border-right: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notice-cell:last-child {
+    border-right: none;
+}
+
+.notice-cell.title {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.notice-badge {
+    background: #dc3545;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.notice-link {
+    color: #003876;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.notice-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* 빈 상태 */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+/* 시연 페이지 스타일 */
+.demo-section, .status-section, .demo-notices-section, .instructions-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: #003876;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.section-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.demo-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.demo-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.demo-card h3 {
+    color: #003876;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.demo-card p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.demo-input, .demo-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.demo-input:focus, .demo-textarea:focus {
+    outline: none;
+    border-color: #003876;
+}
+
+.demo-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.demo-btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.demo-btn.primary {
+    background: #003876;
+    color: white;
+}
+
+.demo-btn.primary:hover {
+    background: #0056b3;
+}
+
+.demo-btn.secondary {
+    background: #28a745;
+    color: white;
+}
+
+.demo-btn.secondary:hover {
+    background: #218838;
+}
+
+.demo-btn.danger {
+    background: #dc3545;
+    color: white;
+}
+
+.demo-btn.danger:hover {
+    background: #c82333;
+}
+
+.demo-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.status-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.status-card h3 {
+    color: #003876;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.status-indicator-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.status-details p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.demo-notices-count {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.count-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #003876;
+    display: block;
+}
+
+.count-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.refresh-btn.small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+}
+
+.demo-notices-list {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.demo-notice-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.demo-notice-item:last-child {
+    border-bottom: none;
+}
+
+.demo-notice-title {
+    font-weight: 600;
+    color: #003876;
+    margin-bottom: 0.5rem;
+}
+
+.demo-notice-content {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.demo-notice-time {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.instructions {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.instructions ol {
+    padding-left: 1.5rem;
+}
+
+.instructions li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.instructions strong {
+    color: #003876;
+}
+
+/* 알림 메시지 */
+.alert-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 400px;
+}
+
+.alert-message.show {
+    transform: translateX(0);
+}
+
+.alert-success {
+    background: #28a745;
+}
+
+.alert-error {
+    background: #dc3545;
+}
+
+.alert-warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.alert-info {
+    background: #17a2b8;
+}
+
+/* 푸터 */
+.footer {
+    background: #f8f9fa;
+    padding: 1rem 2rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        margin: 0;
+        box-shadow: none;
+    }
+    
+    .header {
+        padding: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .university-name {
+        font-size: 1.5rem;
+    }
+    
+    .main {
+        padding: 1rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-container {
+        max-width: none;
+    }
+    
+    .notices-header, .notice-item {
+        grid-template-columns: 60px 1fr 80px 100px;
+        font-size: 0.85rem;
+    }
+    
+    .header-cell, .notice-cell {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .demo-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .notices-header, .notice-item {
+        grid-template-columns: 50px 1fr 70px;
+    }
+    
+    .header-cell.author, .notice-cell.author {
+        display: none;
+    }
+    
+    .header-cell, .notice-cell {
+        padding: 0.5rem 0.25rem;
+    }
+}
+
