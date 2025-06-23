@@ -13,7 +13,7 @@ class DongseoCrawler:
     def __init__(self, db_path='notices.db'):
         self.db_path = db_path
         self.base_url = "https://www.dongseo.ac.kr"
-        self.notice_url = "https://www.dongseo.ac.kr/ko/board/notice"
+        self.notice_url = "https://www.dongseo.ac.kr/kr/index.php?pCode=MN2000194"
 
         
     def init_database(self):

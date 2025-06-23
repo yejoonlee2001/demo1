@@ -262,11 +262,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 마지막 업데이트 시간 업데이트
     function updateLastUpdate() {
-        if (lastUpdate) {
-            const now = new Date();
-            lastUpdate.textContent = `마지막 업데이트: ${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        }
+    const updateTimeElement = document.getElementById('updateTime');
+    if (updateTimeElement) {
+        const now = new Date();
+        const timeString = now.getFullYear() + '-' + 
+                          String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                          String(now.getDate()).padStart(2, '0') + ' ' + 
+                          String(now.getHours()).padStart(2, '0') + ':' + 
+                          String(now.getMinutes()).padStart(2, '0');
+        updateTimeElement.textContent = timeString;
     }
+}
+
 
     // 알림 메시지 표시
     function showAlert(message, type = 'info') {

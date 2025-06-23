@@ -50,7 +50,8 @@
                 <div class="status-info">
                     <span id="noticeCount">{{ notices|length }}건의 공지사항</span>
                     <span class="separator">|</span>
-                    <span id="lastUpdate">마지막 업데이트: {{ moment().format('YYYY-MM-DD HH:mm') }}</span>
+                    <span id="lastUpdate">마지막 업데이트: <span id="updateTime">로딩 중...</span></span>
+
                 </div>
                 <div class="onesignal-status">
                     <span class="status-indicator status-{{ onesignal_status.status }}"></span>
