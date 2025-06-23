@@ -109,7 +109,9 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
         // OneSignal 상태 정보를 JavaScript로 전달
-        window.oneSignalStatus = {{ onesignal_status | tojsonfilter | safe }};
+        window.oneSignalStatus = JSON.parse('{{ onesignal_status | tojson | safe }}');
+
+
     </script>
 </body>
 </html>

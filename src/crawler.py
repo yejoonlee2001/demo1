@@ -13,7 +13,8 @@ class DongseoCrawler:
     def __init__(self, db_path='notices.db'):
         self.db_path = db_path
         self.base_url = "https://www.dongseo.ac.kr"
-        self.notice_url = "https://www.dongseo.ac.kr/ko/CMS/Board/Board.do?mCode=MN164&mgr_seq=16"
+        self.notice_url = "https://www.dongseo.ac.kr/ko/board/notice"
+
         
     def init_database(self):
         """데이터베이스 초기화"""
